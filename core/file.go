@@ -1,8 +1,9 @@
 package space
 
 import (
+	"bufio"
 	"bytes"
-	"io/ioutil"
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -13,6 +14,7 @@ type File struct {
 	Buffer   *bytes.Buffer
 	realpath string
 	status   int
+	Metadata Map
 }
 
 func (f *File) Written() bool {
@@ -44,11 +46,26 @@ func (f *File) Write() (err error) {
 }
 
 func (f *File) Read() (err error) {
-	data, err := ioutil.ReadFile(f.realpath)
+	fh, err := os.Open(f.realpath)
+	if err != nil {
+		return err
+	}
+	r := bufio.NewReader(fh)
+	defer fh.Close()
+
+	// parse front-matter
+	contents, metadata, err := FrontMatterParser(r)
+
 	if err != nil {
 		return err
 	}
 
-	_, err = f.Buffer.ReadFrom(bytes.NewBuffer(data))
+	if metadata != nil {
+	}
+
+	_, err = f.Buffer.ReadFrom(contents)
+
+	fmt.Println(f.Buffer)
+
 	return err
 }

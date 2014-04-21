@@ -65,7 +65,7 @@ func (s *Space) Destination() string {
 func (s *Space) Join(path ...string) string {
 	p := make([]string, len(path)+1)
 	p[0] = s.dir
-	copy(p[1:], path[0:])
+	copy(p[1:], path)
 	return filepath.Join(p...)
 }
 
@@ -105,7 +105,7 @@ func build(s *Space) mw.Handler {
 		for _, file := range s.fs.Files() {
 			path := filepath.Join(s.Destination(), file.Path)
 			file.Path = path
-			file.Write()
+			//file.Write()
 		}
 	}
 }
