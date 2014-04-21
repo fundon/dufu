@@ -48,7 +48,7 @@ func FrontMatterParser(r *bufio.Reader) (contents, metedata *bytes.Buffer, err e
 		}
 	}
 
-	if opened&closed != 1 {
+	if opened&closed == 0 {
 		contents.WriteTo(metedata)
 		contents = metedata
 		metedata = nil
