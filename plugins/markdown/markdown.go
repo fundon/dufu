@@ -15,7 +15,6 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/futurespaceio/space/core"
 	gfm "github.com/russross/blackfriday"
 )
 
@@ -180,15 +179,4 @@ func RenderMarkdown(rawBytes []byte, urlPrefix string) []byte {
 
 func RenderMarkdownString(raw, urlPrefix string) string {
 	return string(RenderMarkdown([]byte(raw), urlPrefix))
-}
-
-type handler interface{}
-
-func Render() handler {
-	return func(f *space.File) {
-		contents := f.Buffer.Bytes()
-		contents = RenderMarkdown(contents, "")
-		f.Buffer.Reset()
-		f.Buffer.Write(contents)
-	}
 }
