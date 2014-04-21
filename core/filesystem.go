@@ -43,7 +43,7 @@ func (fs *filesystem) Walk(path string) []string {
 	var a []string
 	walker := func(path string, fi os.FileInfo, err error) error {
 		if err != nil {
-			log.Println("Walker: ", err)
+			log.Println("Walker: ", "Please check source dir.")
 			return nil
 		}
 

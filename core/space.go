@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 
 	"github.com/codegangsta/inject"
-	W "github.com/futurespaceio/ware"
+	mw "github.com/futurespaceio/ware"
 )
 
 type Map map[string]interface{}
@@ -75,12 +75,12 @@ func (s *Space) Paths(path string) []string {
 
 type ClassicSpace struct {
 	*Space
-	*W.Ware
+	*mw.Ware
 }
 
 func Classic() *ClassicSpace {
 	// Create a Ware.
-	w := W.New()
+	w := mw.New()
 	s := New()
 	p := s.Processor
 	s.Map(w)
@@ -91,8 +91,8 @@ func Classic() *ClassicSpace {
 	return &ClassicSpace{s, w}
 }
 
-func build(s *Space) W.Handler {
-	return func(c W.Context) {
+func build(s *Space) mw.Handler {
+	return func(c mw.Context) {
 		source := s.Source()
 		paths := s.Paths(source)
 

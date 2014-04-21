@@ -2,12 +2,12 @@ package space
 
 import (
 	"github.com/codegangsta/inject"
-	W "github.com/futurespaceio/ware"
+	mw "github.com/futurespaceio/ware"
 )
 
 type Processor struct {
 	inject.Injector
-	*W.Ware
+	*mw.Ware
 	index int
 }
 
@@ -25,7 +25,7 @@ func (p *Processor) Handle(fs Filesystem) {
 }
 
 func NewProcessor() *Processor {
-	w := W.New()
+	w := mw.New()
 	p := &Processor{inject.New(), w, 0}
 	p.Map(w)
 	return p

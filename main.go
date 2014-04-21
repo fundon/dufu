@@ -4,8 +4,10 @@ import (
 	//"os"
 
 	"github.com/futurespaceio/space/core"
-	//W "github.com/futurespaceio/ware"
+	//mw "github.com/futurespaceio/ware"
 )
+
+const APP_VER = "0.0.0"
 
 func main() {
 	s := space.Classic()
