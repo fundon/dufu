@@ -28,4 +28,8 @@ func main() {
 ```
 
 
+## License
+
+MIT
+
 [ware]: https://github.com/futurespaceio/ware
