@@ -3,9 +3,10 @@ package space
 import (
 	"bufio"
 	"bytes"
-	"fmt"
 	"os"
 	"path/filepath"
+
+	"launchpad.net/goyaml"
 )
 
 type File struct {
@@ -14,7 +15,7 @@ type File struct {
 	Buffer   *bytes.Buffer
 	realpath string
 	status   int
-	Metadata Map
+	Metadata *Metadata
 }
 
 func (f *File) Written() bool {
@@ -61,11 +62,15 @@ func (f *File) Read() (err error) {
 	}
 
 	if metadata != nil {
+		f.Metadata = &Metadata{}
+		// parse yaml
+		err = goyaml.Unmarshal(metadata.Bytes(), f.Metadata)
+		if err != nil {
+			return err
+		}
 	}
 
 	_, err = f.Buffer.ReadFrom(contents)
-
-	fmt.Println(f.Buffer)
 
 	return err
 }

@@ -105,7 +105,7 @@ func build(s *Space) mw.Handler {
 		for _, file := range s.fs.Files() {
 			path := filepath.Join(s.Destination(), file.Path)
 			file.Path = path
-			//file.Write()
+			file.Write()
 		}
 	}
 }
