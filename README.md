@@ -11,18 +11,14 @@ package main
 
 import (
 	"github.com/futurespaceio/space/core"
-	gfm "github.com/futurespaceio/space/plugins/markdown"
+	"github.com/futurespaceio/space/plugins/markdown"
 )
 
 func main() {
 	s := space.Classic()
+	// File Processor Middleware
 	p := s.Processor
-	p.Use(func(f *space.File) {
-		contents := f.Buffer.Bytes()
-		contents = gfm.RenderMarkdown(contents, "")
-		f.Buffer.Reset()
-		f.Buffer.Write(contents)
-	})
+	p.Use(markdown.Render())
 	s.Run()
 }
 ```
