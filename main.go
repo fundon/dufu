@@ -1,13 +1,13 @@
 package main
 
 import (
-  //"os"
+	//"os"
 
-  "github.com/futurespaceio/space/core"
-  //W "github.com/futurespaceio/ware"
+	"github.com/futurespaceio/space/core"
+	//W "github.com/futurespaceio/ware"
 )
 
 func main() {
-  s := space.Classic()
-  s.Run()
+	s := space.Classic()
+	s.Run()
 }
