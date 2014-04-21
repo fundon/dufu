@@ -17,7 +17,6 @@ func FrontMatterParser(r *bufio.Reader) (contents, metedata *bytes.Buffer, err e
 		// frontmatter: opened/closed
 		opened, closed int
 		buf            []byte
-		s              string
 	)
 
 	metedata = new(bytes.Buffer)
@@ -33,8 +32,7 @@ func FrontMatterParser(r *bufio.Reader) (contents, metedata *bytes.Buffer, err e
 		}
 
 		if opened&closed == 0 {
-			s = string(buf)
-			if FRONT_MATTER.MatchString(s) {
+			if FRONT_MATTER.Match(buf) {
 				if opened == 0 {
 					opened = 1
 				} else {
