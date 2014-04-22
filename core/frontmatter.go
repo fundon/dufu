@@ -27,7 +27,8 @@ func FrontMatterParser(r *bufio.Reader) (contents, metedata *bytes.Buffer, err e
 		buf, err = r.ReadBytes(EOL)
 		if err == io.EOF {
 			break
-		} else if err != nil {
+		}
+		if err != nil {
 			return nil, nil, err
 		}
 
