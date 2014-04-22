@@ -10,9 +10,9 @@ import (
 )
 
 type File struct {
-	Name     string
 	Path     string
 	Buffer   *bytes.Buffer
+	Info     FileInfo
 	realpath string
 	status   int
 	Metadata *Metadata

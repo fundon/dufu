@@ -69,7 +69,7 @@ func (s *Space) Join(path ...string) string {
 	return filepath.Join(p...)
 }
 
-func (s *Space) Paths(path string) []string {
+func (s *Space) Paths(path string) FileInfos {
 	return s.fs.Walk(path)
 }
 
@@ -94,10 +94,10 @@ func Classic() *ClassicSpace {
 func build(s *Space) mw.Handler {
 	return func(c mw.Context) {
 		source := s.Source()
-		paths := s.Paths(source)
+		fileInfos := s.Paths(source)
 
-		for _, path := range paths {
-			s.fs.Add(path, source)
+		for path, fileInfo := range fileInfos {
+			s.fs.Add(path, fileInfo, source)
 		}
 
 		c.Next()

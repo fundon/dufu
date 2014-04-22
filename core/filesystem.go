@@ -7,9 +7,12 @@ import (
 	"path/filepath"
 )
 
+type FileInfo os.FileInfo
+type FileInfos map[string]FileInfo
+
 type Filesystem interface {
-	Add(string, string)
-	Walk(string) []string
+	Add(string, FileInfo, string)
+	Walk(string) FileInfos
 	Files() []*File
 }
 
@@ -25,22 +28,20 @@ func (fs *filesystem) Files() []*File {
 	return fs.files
 }
 
-func (fs *filesystem) Add(realpath string, basepath string) {
+func (fs *filesystem) Add(realpath string, fi FileInfo, basepath string) {
 	// relative path
 	path, _ := filepath.Rel(basepath, realpath)
-	// file's basename, including extname
-	_, name := filepath.Split(realpath)
 
 	fs.files = append(fs.files, &File{
-		Name:     name,
 		Path:     path,
 		Buffer:   &bytes.Buffer{},
+		Info:     fi,
 		realpath: realpath,
 	})
 }
 
-func (fs *filesystem) Walk(path string) []string {
-	var a []string
+func (fs *filesystem) Walk(path string) (a FileInfos) {
+	a = make(FileInfos, 0)
 	walker := func(name string, fi os.FileInfo, err error) error {
 		if err != nil {
 			log.Println("Walker: ", "Please check source dir.")
@@ -56,7 +57,7 @@ func (fs *filesystem) Walk(path string) []string {
 		}
 
 		if isSkip == isDir {
-			a = append(a, name)
+			a[name] = fi
 		}
 		return nil
 	}
