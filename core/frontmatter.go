@@ -14,9 +14,12 @@ var (
 
 func FrontMatterParser(r *bufio.Reader) (contents, metedata *bytes.Buffer, err error) {
 	var (
-		// frontmatter: opened/closed
-		opened, closed int
-		buf            []byte
+		// check frontmatter
+		// 0: no fm
+		// 1: fm start
+		// 2: fm end
+		status int
+		buf    []byte
 	)
 
 	metedata = new(bytes.Buffer)
@@ -31,16 +34,16 @@ func FrontMatterParser(r *bufio.Reader) (contents, metedata *bytes.Buffer, err e
 			return nil, nil, err
 		}
 
-		if opened&closed == 0 {
+		if status < 2 {
 			if FRONT_MATTER.Match(buf) {
-				if opened == 0 {
-					opened = 1
+				if status == 0 {
+					status = 1
 				} else {
-					closed = 1
+					status = 2
 				}
 			}
 
-			if opened|closed == 1 {
+			if status > 0 {
 				metedata.Write(buf)
 			}
 		} else {
@@ -48,7 +51,7 @@ func FrontMatterParser(r *bufio.Reader) (contents, metedata *bytes.Buffer, err e
 		}
 	}
 
-	if opened&closed == 0 {
+	if status == 0 {
 		contents.WriteTo(metedata)
 		contents = metedata
 		metedata = nil
