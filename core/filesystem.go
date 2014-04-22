@@ -41,14 +41,22 @@ func (fs *filesystem) Add(realpath string, basepath string) {
 
 func (fs *filesystem) Walk(path string) []string {
 	var a []string
-	walker := func(path string, fi os.FileInfo, err error) error {
+	walker := func(name string, fi os.FileInfo, err error) error {
 		if err != nil {
 			log.Println("Walker: ", "Please check source dir.")
 			return nil
 		}
 
-		if false == fi.IsDir() {
-			a = append(a, path)
+		dot := filepath.Base(name)[0]
+		isDir := fi.IsDir()
+		isSkip := dot == '.'
+
+		if isSkip && isDir {
+			return filepath.SkipDir
+		}
+
+		if isSkip == isDir {
+			a = append(a, name)
 		}
 		return nil
 	}
