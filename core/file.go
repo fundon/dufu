@@ -18,6 +18,10 @@ type File struct {
 	Metadata *Metadata
 }
 
+func (f *File) Status(i int) {
+	f.status = i
+}
+
 func (f *File) Written() bool {
 	return f.status != 0
 }
