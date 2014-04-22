@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/futurespaceio/space/core"
+	. "github.com/futurespaceio/space/plugins/drafts"
 	"github.com/futurespaceio/space/plugins/markdown"
 	mw "github.com/futurespaceio/ware"
 )
@@ -26,10 +27,11 @@ func main() {
 	p := s.Processor
 	p.Use(func(c mw.Context, f *space.File, log *log.Logger) {
 		start := time.Now()
-		log.Printf("File Started %s", f.Name)
+		log.Printf("File Started %s", f.Info.Name())
 		c.Next()
 		log.Printf("File Rendered %v \n", time.Since(start))
 	})
+	p.Use(Drafts())
 	p.Use(markdown.Render())
 	s.Run()
 }
