@@ -10,16 +10,14 @@ import (
 
 var (
 	FRONT_MATTER = regexp.MustCompile(`---\s*`)
+	EOL          = byte('\n')
 )
 
 func FrontMatterParser(r *bufio.Reader) (contents, metedata *bytes.Buffer, err error) {
 	var (
-		// check frontmatter
-		// 0: no fm
-		// 1: fm start
-		// 2: fm end
-		status int
-		buf    []byte
+		// frontmatter: opened/closed
+		opened, closed int
+		buf            []byte
 	)
 
 	metedata = new(bytes.Buffer)
@@ -27,23 +25,23 @@ func FrontMatterParser(r *bufio.Reader) (contents, metedata *bytes.Buffer, err e
 
 	for {
 		// read line by line
-		buf, err = r.ReadBytes('\n')
+		buf, err = r.ReadBytes(EOL)
 		if err == io.EOF {
 			break
 		} else if err != nil {
 			return nil, nil, err
 		}
 
-		if status < 2 {
+		if opened&closed == 0 {
 			if FRONT_MATTER.Match(buf) {
-				if status == 0 {
-					status = 1
+				if opened == 0 {
+					opened = 1
 				} else {
-					status = 2
+					closed = 1
 				}
 			}
 
-			if status > 0 {
+			if opened|closed == 1 {
 				metedata.Write(buf)
 			}
 		} else {
@@ -51,7 +49,7 @@ func FrontMatterParser(r *bufio.Reader) (contents, metedata *bytes.Buffer, err e
 		}
 	}
 
-	if status == 0 {
+	if opened&closed == 0 {
 		contents.WriteTo(metedata)
 		contents = metedata
 		metedata = nil
