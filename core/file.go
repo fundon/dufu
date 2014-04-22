@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"launchpad.net/goyaml"
+	"gopkg.in/yaml.v1"
 )
 
 type File struct {
@@ -68,13 +68,12 @@ func (f *File) Read() (err error) {
 	if metadata != nil {
 		f.Metadata = &Metadata{}
 		// parse yaml
-		err = goyaml.Unmarshal(metadata.Bytes(), f.Metadata)
+		err = yaml.Unmarshal(metadata.Bytes(), f.Metadata)
 		if err != nil {
 			return err
 		}
 	}
 
 	_, err = f.Buffer.ReadFrom(contents)
-
 	return err
 }
