@@ -28,14 +28,14 @@ func main() {
 	})
 	// File Processor Middleware
 	p := s.Processor
-	p.Use(Drafts())
 	p.Use(func(c mw.Context, log *log.Logger, f *space.File) {
 		start := time.Now()
-		log.Printf("File Started %s", f.Name)
+		log.Printf("File Started %s", f.Info.Name())
 		c.Next()
 		log.Printf("File Rendered %v \n", time.Since(start))
 	})
 	p.Use(markdown.Render())
+	p.Use(Drafts())
 	s.Run()
 }
 ```
