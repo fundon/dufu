@@ -34,8 +34,8 @@ func main() {
 		c.Next()
 		log.Printf("File Rendered %v \n", time.Since(start))
 	})
-	p.Use(markdown.Render())
 	p.Use(Drafts())
+	p.Use(markdown.Render())
 	s.Run()
 }
 ```
