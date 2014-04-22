@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/futurespaceio/space/core"
+	. "github.com/futurespaceio/space/plugins/drafts"
 	"github.com/futurespaceio/space/plugins/markdown"
 	mw "github.com/futurespaceio/ware"
 )
@@ -27,6 +28,7 @@ func main() {
 	})
 	// File Processor Middleware
 	p := s.Processor
+	p.Use(Drafts())
 	p.Use(func(c mw.Context, log *log.Logger, f *space.File) {
 		start := time.Now()
 		log.Printf("File Started %s", f.Name)
