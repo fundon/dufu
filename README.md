@@ -1,4 +1,4 @@
-# Space in Go
+# Space in Go (WIP)
 
 A fast, pluggable static site generator using [ware][] in Golang.
 
