@@ -7,6 +7,6 @@ type Metadata struct {
 	Permalink  string                 `yaml:"permalink"`
 	Categories []string               `yaml:"categories"`
 	Tags       []string               `yaml:"tags"`
-	Drafts     bool                   `yaml:"drafts"`
+	Draft      bool                   `yaml:"draft"`
 	Vars       map[string]interface{} `yaml:"vars,omitempty"`
 }

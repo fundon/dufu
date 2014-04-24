@@ -3,6 +3,7 @@ package space
 import (
 	"bufio"
 	"bytes"
+	"io"
 	"os"
 	"path/filepath"
 
@@ -43,7 +44,7 @@ func (f *File) Write() (err error) {
 	}
 	defer file.Close()
 
-	_, err = f.Buffer.WriteTo(file)
+	_, err = io.Copy(file, f.Buffer)
 	if err != nil {
 		f.status = 200
 	}
@@ -65,8 +66,8 @@ func (f *File) Read() (err error) {
 		return err
 	}
 
+	f.Metadata = &Metadata{}
 	if metadata != nil {
-		f.Metadata = &Metadata{}
 		// parse yaml
 		err = yaml.Unmarshal(metadata.Bytes(), f.Metadata)
 		if err != nil {

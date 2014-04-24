@@ -4,10 +4,9 @@ import "github.com/futurespaceio/space/core"
 
 type handler interface{}
 
-func Drafts() handler {
+func Handle() handler {
 	return func(f *space.File) {
-		metas := f.Metadata
-		if metas != nil && metas.Drafts == true {
+		if f.Metadata.Draft == true {
 			f.Status(200)
 		}
 	}

@@ -15,8 +15,9 @@ import (
 	"time"
 
 	"github.com/futurespaceio/space/core"
-	. "github.com/futurespaceio/space/plugins/drafts"
+	"github.com/futurespaceio/space/plugins/drafts"
 	"github.com/futurespaceio/space/plugins/markdown"
+	"github.com/futurespaceio/space/plugins/permalinks"
 	mw "github.com/futurespaceio/ware"
 )
 
@@ -34,8 +35,9 @@ func main() {
 		c.Next()
 		log.Printf("File Rendered %v \n", time.Since(start))
 	})
-	p.Use(Drafts())
+	p.Use(drafts.Handle())
 	p.Use(markdown.Render())
+	p.Use(permalinks.Handle("pertty"))
 	s.Run()
 }
 ```
