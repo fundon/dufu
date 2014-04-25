@@ -1,6 +1,6 @@
 # Space in Go (WIP)
 
-A fast, pluggable static site generator using [ware][] in Golang.
+A fast, modular static site generator using [ware][] in Golang.
 
 
 
@@ -15,9 +15,9 @@ import (
 	"time"
 
 	"github.com/futurespaceio/space/core"
-	"github.com/futurespaceio/space/plugins/drafts"
-	"github.com/futurespaceio/space/plugins/markdown"
-	"github.com/futurespaceio/space/plugins/permalinks"
+	"github.com/futurespaceio/space/modules/drafts"
+	"github.com/futurespaceio/space/modules/markdown"
+	"github.com/futurespaceio/space/modules/permalinks"
 	mw "github.com/futurespaceio/ware"
 )
 
