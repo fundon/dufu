@@ -1,6 +1,6 @@
 package markdown
 
-import "github.com/futurespaceio/space/core"
+import "github.com/futurespaceio/dufu/space"
 
 type handler interface{}
 

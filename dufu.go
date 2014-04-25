@@ -5,10 +5,10 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/futurespaceio/space/core"
-	"github.com/futurespaceio/space/modules/drafts"
-	"github.com/futurespaceio/space/modules/markdown"
-	"github.com/futurespaceio/space/modules/permalinks"
+	"github.com/futurespaceio/dufu/modules/drafts"
+	"github.com/futurespaceio/dufu/modules/markdown"
+	"github.com/futurespaceio/dufu/modules/permalinks"
+	"github.com/futurespaceio/dufu/space"
 	mw "github.com/futurespaceio/ware"
 )
 

@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/futurespaceio/space/core"
+	"github.com/futurespaceio/dufu/space"
 )
 
 const (
