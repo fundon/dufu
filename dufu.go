@@ -5,9 +5,9 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/futurespaceio/dufu/modules/drafts"
-	"github.com/futurespaceio/dufu/modules/markdown"
-	"github.com/futurespaceio/dufu/modules/permalinks"
+	"github.com/futurespaceio/dufu/plugins/drafts"
+	"github.com/futurespaceio/dufu/plugins/markdown"
+	"github.com/futurespaceio/dufu/plugins/permalinks"
 	"github.com/futurespaceio/dufu/space"
 	mw "github.com/futurespaceio/ware"
 )

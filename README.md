@@ -1,6 +1,6 @@
 # Dufu (WIP)
 
-A fast, modular static site generator using [ware][] in Golang.
+A fast, pluggable static site generator using [ware][] in Golang.
 
 
 
@@ -14,9 +14,9 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/futurespaceio/dufu/modules/drafts"
-	"github.com/futurespaceio/dufu/modules/markdown"
-	"github.com/futurespaceio/dufu/modules/permalinks"
+	"github.com/futurespaceio/dufu/plugins/drafts"
+	"github.com/futurespaceio/dufu/plugins/markdown"
+	"github.com/futurespaceio/dufu/plugins/permalinks"
 	"github.com/futurespaceio/dufu/space"
 	mw "github.com/futurespaceio/ware"
 )
