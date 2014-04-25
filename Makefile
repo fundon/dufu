@@ -9,6 +9,6 @@ fmt:
 
 build:	get
 	@mkdir -p bin
-	@go build -a -o bin/space
+	@go build -a -o bin/dufu
 
 .PHONY: bench fmt get build
