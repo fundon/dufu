@@ -16,9 +16,13 @@ const (
 	TIME_LAYOUT = time.RFC3339
 	// http://jekyll.com/docs/permalinks/
 	DATE   = "/:categories/:year/:month/:day/:title.html"
-	PERTTY = "/:categories/:year/:month/:day/:title/"
+	PRETTY = "/:categories/:year/:month/:day/:title/"
 	NONE   = "/:categories/:title.html"
+	HTML   = ".html"
+	INDEX  = "index" + HTML
 )
+
+type store map[string]string
 
 // match `/cate0/cate1/2013-01-02-title.md`
 var MATCHER = regexp.MustCompile(`^(.+\/)*(\d+-\d+-\d+)-(.*)(\.[^.]+)$`)
@@ -28,30 +32,32 @@ var PATTERN_REGEXP = regexp.MustCompile(`:(\w+)`)
 
 var SLUG_REGEXP = regexp.MustCompile(`-{2,}`)
 
-func Handle(opts ...string) interface{} {
-	maps := make(map[string]string, 0)
-	maps["none"] = NONE
-	maps["date"] = DATE
-	maps["pertty"] = PERTTY
-	var pattern, key string
-	if len(opts) == 0 {
+func Handle(ags ...string) interface{} {
+	var (
+		pattern, key string
+		patterns     = store{}
+		now          = time.Now()
+	)
+	patterns["none"] = NONE
+	patterns["date"] = DATE
+	patterns["pretty"] = PRETTY
+	if len(ags) == 0 {
 		key = "none"
 	} else {
-		key = opts[0]
+		key = ags[0]
 	}
-	pattern = maps[key]
+	pattern = patterns[key]
 	if pattern == "" {
 		pattern = key
 	}
 	patternMatchs := PATTERN_REGEXP.FindAllString(pattern, -1)
-	now := time.Now()
 
 	return func(f *space.File) {
 
 		var (
 			permalink          = f.Metadata.Permalink
 			dateStr            = f.Metadata.Date
-			title              = f.Info.Name()
+			title              = strings.ToLower(f.Info.Name())
 			ishtml             = isHTML(path.Ext(title))
 			matchs, categories []string
 			date               time.Time
@@ -85,15 +91,16 @@ func Handle(opts ...string) interface{} {
 			matchs = PATTERN_REGEXP.FindAllString(permalink, -1)
 		}
 
-		if len(matchs) != 0 {
-			if f.Metadata.Title != "" {
-				title = slugify(f.Metadata.Title)
-			} else {
+		if len(matchs) > 0 {
+			if f.Metadata.Title == "" {
 				title = basename(title)
+			} else {
+				title = strings.ToLower(slugify(f.Metadata.Title))
 			}
-			if len(f.Metadata.Categories) != 0 {
+			if len(f.Metadata.Categories) > 0 {
 				categories = f.Metadata.Categories
 			}
+
 			placeholders := urlPlaceholders(date, title, categories)
 
 			for _, m := range matchs {
@@ -101,35 +108,35 @@ func Handle(opts ...string) interface{} {
 				permalink = strings.Replace(permalink, m, placeholders[k], -1)
 			}
 		}
-		noHasExt := strings.HasSuffix(permalink, ".html") == false
-		if ishtml == false && noHasExt {
-			permalink = filepath.Join(permalink, "index.html")
-		} else if ishtml && noHasExt {
-			permalink = filepath.Clean(permalink)
-			permalink += ".html"
+		if strings.HasSuffix(permalink, HTML) == false {
+			if ishtml {
+				permalink = permalink[:len(permalink)-1] + HTML
+			} else {
+				permalink = filepath.Join(permalink, INDEX)
+			}
 		}
 
 		f.Path = filepath.Clean(permalink)
 	}
 }
 
-func urlPlaceholders(t time.Time, title string, categories []string) map[string]string {
-	opts := make(map[string]string, 0)
+func urlPlaceholders(t time.Time, title string, categories []string) store {
 	var (
 		year  = t.Year()
 		month = t.Month()
 		day   = t.Day()
+		ph    = store{}
 	)
-	opts["year"] = fmt.Sprintf("%d", year)
-	opts["month"] = fmt.Sprintf("%02d", month)
-	opts["i_month"] = fmt.Sprintf("%d", month)
-	opts["day"] = fmt.Sprintf("%02d", day)
-	opts["i_day"] = fmt.Sprintf("%d", day)
-	opts["short_month"] = t.Format("Jan")
-	opts["y_day"] = fmt.Sprintf("%d", t.YearDay())
-	opts["title"] = title
-	opts["categories"] = path.Join(categories...)
-	return opts
+	ph["year"] = fmt.Sprintf("%d", year)
+	ph["month"] = fmt.Sprintf("%02d", month)
+	ph["i_month"] = fmt.Sprintf("%d", month)
+	ph["day"] = fmt.Sprintf("%02d", day)
+	ph["i_day"] = fmt.Sprintf("%d", day)
+	ph["short_month"] = t.Format("Jan")
+	ph["y_day"] = fmt.Sprintf("%d", t.YearDay())
+	ph["title"] = title
+	ph["categories"] = path.Join(categories...)
+	return ph
 }
 
 func titleizedSlug(slug string) string {
@@ -137,14 +144,13 @@ func titleizedSlug(slug string) string {
 }
 
 func slugify(title string) string {
-	title = strings.ToLower(strings.Replace(title, " ", "-", -1))
+	title = strings.Replace(title, " ", "-", -1)
 	title = SLUG_REGEXP.ReplaceAllString(title, "-")
 	return title
 }
 
 func basename(p string) string {
-	p = strings.Replace(p, path.Ext(p), "", -1)
-	return strings.ToLower(p)
+	return strings.Replace(p, path.Ext(p), "", -1)
 }
 
 func isHTML(p string) bool {
