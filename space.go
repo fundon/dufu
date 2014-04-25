@@ -34,6 +34,6 @@ func main() {
 	})
 	p.Use(drafts.Handle())
 	p.Use(markdown.Render())
-	p.Use(permalinks.Handle("pertty"))
+	p.Use(permalinks.Handle("pretty"))
 	s.Run()
 }
