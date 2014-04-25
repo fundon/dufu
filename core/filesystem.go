@@ -42,6 +42,7 @@ func (fs *filesystem) Add(realpath string, fi FileInfo, basepath string) {
 
 func (fs *filesystem) Walk(path string) (a FileInfos) {
 	a = make(FileInfos, 0)
+	path, _ = filepath.EvalSymlinks(path)
 	walker := func(name string, fi os.FileInfo, err error) error {
 		if err != nil {
 			log.Println("Walker: ", "Please check source dir.")
