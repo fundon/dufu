@@ -11,4 +11,8 @@ build:	get
 	@mkdir -p bin
 	@go build -a -o bin/dufu
 
-.PHONY: bench fmt get build
+gox-build: get
+	@mkdir -p bin
+	@gox  -output bin/"dufu_{{.OS}}_{{.Arch}}"
+
+.PHONY: bench fmt get build gox-build
