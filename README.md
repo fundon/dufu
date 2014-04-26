@@ -17,6 +17,7 @@ import (
 	"github.com/futurespaceio/dufu/plugins/drafts"
 	"github.com/futurespaceio/dufu/plugins/markdown"
 	"github.com/futurespaceio/dufu/plugins/permalinks"
+	"github.com/futurespaceio/dufu/plugins/template"
 	"github.com/futurespaceio/dufu/space"
 	mw "github.com/futurespaceio/ware"
 )
@@ -38,6 +39,12 @@ func main() {
 	p.Use(drafts.Handle())
 	p.Use(markdown.Render())
 	p.Use(permalinks.Handle("pretty"))
+	p.Use(template.Renderer(template.Options{
+		Layout: "layout",
+	}))
+	p.Use(func(f *space.File, r template.Render) {
+		r.HTML(0, "post", f.Metadata)
+	})
 	s.Run()
 }
 ```
