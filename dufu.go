@@ -42,7 +42,11 @@ func main() {
 		Layout: "layout",
 	}))
 	p.Use(func(f *space.File, r template.Render) {
-		r.HTML(0, "post", f.Metadata)
+		layout := f.Metadata.Layout
+		if layout == "" {
+			layout = "default"
+		}
+		r.HTML(0, layout, f.Metadata)
 	})
 	s.Run()
 }
