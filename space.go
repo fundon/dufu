@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -9,18 +10,16 @@ import (
 	"regexp"
 	"time"
 
+	"github.com/BurntSushi/toml"
 	"github.com/codegangsta/cli"
 	"github.com/futurespaceio/dufu/plugins/drafts"
 	"github.com/futurespaceio/dufu/plugins/markdown"
 	"github.com/futurespaceio/dufu/plugins/permalinks"
 	"github.com/futurespaceio/dufu/plugins/template"
 	"github.com/futurespaceio/dufu/space"
-
-	"encoding/json"
-
-	"github.com/BurntSushi/toml"
-	mw "github.com/futurespaceio/ware"
 	"gopkg.in/yaml.v1"
+
+	mw "github.com/futurespaceio/ware"
 )
 
 var CmdBuild = cli.Command{
