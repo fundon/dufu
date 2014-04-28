@@ -1,8 +1,12 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
+	"path"
+	"regexp"
 	"time"
 
 	"github.com/codegangsta/cli"
@@ -11,7 +15,12 @@ import (
 	"github.com/futurespaceio/dufu/plugins/permalinks"
 	"github.com/futurespaceio/dufu/plugins/template"
 	"github.com/futurespaceio/dufu/space"
+
+	"encoding/json"
+
+	"github.com/BurntSushi/toml"
 	mw "github.com/futurespaceio/ware"
+	"gopkg.in/yaml.v1"
 )
 
 var CmdBuild = cli.Command{
@@ -22,15 +31,22 @@ var CmdBuild = cli.Command{
 	Flags: []cli.Flag{
 		cli.StringFlag{"source, s", "src", "Source directory (defaults to ./src)"},
 		cli.StringFlag{"destination, d", "build", "Destination directory (defaults to ./build)"},
+		cli.StringFlag{"config, c", "", "Custom configuration file (defaults to config.yml|toml|json)"},
 	},
 }
 
 func runSpace(c *cli.Context) {
-	cwd, _ := os.Getwd()
 	s := space.Classic()
-	s.Dir(cwd)
-	s.SetMetadata("source", c.String("source"))
-	s.SetMetadata("destination", c.String("destination"))
+
+	config, err := checkConfigFile(c.String("config"))
+	if err == nil {
+		s.Metadata(config)
+	} else {
+		cwd, _ := os.Getwd()
+		s.Dir(cwd)
+		s.SetMetadata("source", c.String("source"))
+		s.SetMetadata("destination", c.String("destination"))
+	}
 	s.Use(func(c mw.Context, fs space.Filesystem, log *log.Logger) {
 		log.SetPrefix("[dufu]")
 		c.Next()
@@ -59,4 +75,66 @@ func runSpace(c *cli.Context) {
 		r.HTML(0, layout, f.Metadata)
 	})
 	s.Run()
+}
+
+func checkConfigFile(fpath string) (config space.Map, err error) {
+	if fpath == "" {
+		fpath = "config.*"
+	}
+	var (
+		de        = path.Ext(fpath)
+		name, ext string
+	)
+	if len(de) > 0 {
+		ext = de[1:]
+		name = fpath[0 : len(fpath)-len(de)]
+	}
+	if name == "" || ext == "" {
+		return nil, fmt.Errorf("not found")
+	}
+
+	var (
+		exts = []string{"yml", "yaml", "toml", "json"}
+		arr  map[string]string
+	)
+	arr = make(map[string]string, 0)
+	if ext == "*" {
+		for _, e := range exts {
+			arr[e] = "config." + e
+		}
+	} else {
+		arr[ext] = fpath
+	}
+
+	var bs []byte
+	for e, a := range arr {
+		ext = e
+		bs, err = readFile(a)
+		if err == nil {
+			break
+		}
+	}
+
+	switch ext {
+	case "yml", "yaml":
+		err = yaml.Unmarshal(bs, &config)
+		return config, err
+	case "toml":
+		_, err = toml.Decode(string(bs), &config)
+		return config, err
+	case "json":
+		err = json.Unmarshal(bs, &config)
+		return config, err
+	}
+	return nil, fmt.Errorf("not found")
+}
+
+func readFile(fpath string) (bs []byte, err error) {
+	reg := regexp.MustCompile(`config\.(ya?ml|toml|json)`)
+	if reg.MatchString(fpath) == false {
+		return nil, fmt.Errorf("not found")
+	}
+
+	bs, err = ioutil.ReadFile(fpath)
+	return bs, err
 }

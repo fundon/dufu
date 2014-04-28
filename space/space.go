@@ -23,6 +23,10 @@ func New() *Space {
 	return s
 }
 
+func (s *Space) Metadata(m Map) {
+	s.metadata = m
+}
+
 func (s *Space) SetMetadata(key string, value interface{}) {
 	s.metadata[key] = value
 }
