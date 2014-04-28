@@ -4,6 +4,20 @@ A fast, pluggable static site generator using [ware][] in Golang.
 
 
 
+## Usage:
+
+### Commands
+
+```
+$ dufu help
+```
+
+#### dufu build
+```
+$ dufu help build
+```
+
+
 ## Samples:
 
 ```go
@@ -48,6 +62,7 @@ func main() {
 	s.Run()
 }
 ```
+
 
 
 ## License
