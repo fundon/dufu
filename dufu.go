@@ -1,16 +1,10 @@
 package main
 
 import (
-	"log"
+	"os"
 	"runtime"
-	"time"
 
-	"github.com/futurespaceio/dufu/plugins/drafts"
-	"github.com/futurespaceio/dufu/plugins/markdown"
-	"github.com/futurespaceio/dufu/plugins/permalinks"
-	"github.com/futurespaceio/dufu/plugins/template"
-	"github.com/futurespaceio/dufu/space"
-	mw "github.com/futurespaceio/ware"
+	"github.com/codegangsta/cli"
 )
 
 const APP_VER = "0.0.0"
@@ -20,33 +14,14 @@ func init() {
 }
 
 func main() {
-	s := space.Classic()
-	s.Use(func(c mw.Context, fs space.Filesystem, log *log.Logger) {
-		log.SetPrefix("[dufu]")
-		c.Next()
-		log.Printf("Compiled %v files\n", len(fs.Files()))
-	})
-	// File Processor Middleware
-	p := s.Processor
-	p.Use(func(c mw.Context, f *space.File, log *log.Logger) {
-		log.SetPrefix("[dufu]")
-		start := time.Now()
-		log.Printf("File Started %s", f.Info.Name())
-		c.Next()
-		log.Printf("File Rendered %v \n", time.Since(start))
-	})
-	p.Use(drafts.Handle())
-	p.Use(markdown.Render())
-	p.Use(permalinks.Handle("pretty"))
-	p.Use(template.Renderer(template.Options{
-		Layout: "layout",
-	}))
-	p.Use(func(f *space.File, r template.Render) {
-		layout := f.Metadata.Layout
-		if layout == "" {
-			layout = "default"
-		}
-		r.HTML(0, layout, f.Metadata)
-	})
-	s.Run()
+	app := cli.NewApp()
+	app.Name = "Dufu"
+	app.Usage = "A fast, pluggable static site generator"
+	app.Version = APP_VER
+	app.Commands = []cli.Command{
+		CmdBuild,
+	}
+	flags := []cli.Flag{}
+	app.Flags = append(app.Flags, flags...)
+	app.Run(os.Args)
 }
