@@ -2,7 +2,7 @@ package space
 
 import (
 	"github.com/codegangsta/inject"
-	mw "github.com/futurespaceio/ware"
+	mw "github.com/futurespace/ware"
 )
 
 type Processor struct {

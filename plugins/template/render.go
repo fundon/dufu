@@ -12,8 +12,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/futurespaceio/dufu/space"
-	mw "github.com/futurespaceio/ware"
+	"github.com/futurespace/dufu/space"
+	mw "github.com/futurespace/ware"
 )
 
 type Options struct {

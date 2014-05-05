@@ -3,7 +3,7 @@ package space
 import (
 	"reflect"
 
-	mw "github.com/futurespaceio/ware"
+	mw "github.com/futurespace/ware"
 )
 
 func defaultReturnHandler() mw.ReturnHandler {

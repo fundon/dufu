@@ -21,7 +21,6 @@ func main() {
 	app.Commands = []cli.Command{
 		CmdBuild,
 	}
-	flags := []cli.Flag{}
-	app.Flags = append(app.Flags, flags...)
+	app.Flags = append(app.Flags, []cli.Flag{}...)
 	app.Run(os.Args)
 }

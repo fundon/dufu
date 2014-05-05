@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	mw "github.com/futurespaceio/ware"
+	mw "github.com/futurespace/ware"
 )
 
 func Logger() mw.Handler {

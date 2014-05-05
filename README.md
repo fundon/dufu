@@ -28,12 +28,12 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/futurespaceio/dufu/plugins/drafts"
-	"github.com/futurespaceio/dufu/plugins/markdown"
-	"github.com/futurespaceio/dufu/plugins/permalinks"
-	"github.com/futurespaceio/dufu/plugins/template"
-	"github.com/futurespaceio/dufu/space"
-	mw "github.com/futurespaceio/ware"
+	"github.com/futurespace/dufu/plugins/drafts"
+	"github.com/futurespace/dufu/plugins/markdown"
+	"github.com/futurespace/dufu/plugins/permalinks"
+	"github.com/futurespace/dufu/plugins/template"
+	"github.com/futurespace/dufu/space"
+	mw "github.com/futurespace/ware"
 )
 
 func main() {
@@ -69,4 +69,4 @@ func main() {
 
 MIT
 
-[ware]: https://github.com/futurespaceio/ware
+[ware]: https://github.com/futurespace/ware
