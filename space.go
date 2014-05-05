@@ -12,14 +12,14 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/codegangsta/cli"
-	"github.com/futurespaceio/dufu/plugins/drafts"
-	"github.com/futurespaceio/dufu/plugins/markdown"
-	"github.com/futurespaceio/dufu/plugins/permalinks"
-	"github.com/futurespaceio/dufu/plugins/template"
-	"github.com/futurespaceio/dufu/space"
+	"github.com/futurespace/dufu/plugins/drafts"
+	"github.com/futurespace/dufu/plugins/markdown"
+	"github.com/futurespace/dufu/plugins/permalinks"
+	"github.com/futurespace/dufu/plugins/template"
+	"github.com/futurespace/dufu/space"
 	"gopkg.in/yaml.v1"
 
-	mw "github.com/futurespaceio/ware"
+	mw "github.com/futurespace/ware"
 )
 
 var CmdBuild = cli.Command{
