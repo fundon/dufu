@@ -7,23 +7,21 @@ import (
 	mw "github.com/futurespace/ware"
 )
 
-type Map map[string]interface{}
-
 type Space struct {
 	inject.Injector
 
-	metadata  Map
+	metadata  Locals
 	fs        Filesystem
 	Processor *Processor
 	dir       string
 }
 
 func New() *Space {
-	s := &Space{inject.New(), make(Map, 0), NewFilesystem(), NewProcessor(), "."}
+	s := &Space{inject.New(), make(Locals, 0), NewFilesystem(), NewProcessor(), "."}
 	return s
 }
 
-func (s *Space) Metadata(m Map) {
+func (s *Space) Metadata(m Locals) {
 	s.metadata = m
 }
 

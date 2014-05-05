@@ -76,7 +76,7 @@ func runSpace(c *cli.Context) {
 	s.Run()
 }
 
-func checkConfigFile(fpath string) (config space.Map, err error) {
+func checkConfigFile(fpath string) (config space.Locals, err error) {
 	if fpath == "" {
 		fpath = "config.*"
 	}
