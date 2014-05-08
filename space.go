@@ -38,14 +38,20 @@ func runSpace(c *cli.Context) {
 	s := space.Classic()
 
 	config, err := checkConfigFile(c.String("config"))
+	var cwd string
 	if err == nil {
-		s.Metadata(config)
+		s.Site = config
+		cwd = path.Dir(c.String("config"))
 	} else {
-		cwd, _ := os.Getwd()
-		s.Dir(cwd)
-		s.SetMetadata("source", c.String("source"))
-		s.SetMetadata("destination", c.String("destination"))
+		cwd, _ = os.Getwd()
+		if c.String("source") != "" {
+			s.Site.Source = c.String("source")
+		}
+		if c.String("destination") != "" {
+			s.Site.Destination = c.String("destination")
+		}
 	}
+	s.Dir(cwd)
 	s.Use(func(c mw.Context, fs space.Filesystem, log *log.Logger) {
 		log.SetPrefix("[dufu]")
 		c.Next()
@@ -67,16 +73,16 @@ func runSpace(c *cli.Context) {
 		Layout: "layout",
 	}))
 	p.Use(func(f *space.File, r template.Render) {
-		layout := f.Metadata.Layout
+		layout := f.Page.Layout
 		if layout == "" {
 			layout = "default"
 		}
-		r.HTML(0, layout, f.Metadata)
+		r.HTML(0, layout, f.Page)
 	})
 	s.Run()
 }
 
-func checkConfigFile(fpath string) (config space.Locals, err error) {
+func checkConfigFile(fpath string) (c *space.Site, err error) {
 	if fpath == "" {
 		fpath = "config.*"
 	}
@@ -116,14 +122,14 @@ func checkConfigFile(fpath string) (config space.Locals, err error) {
 
 	switch ext {
 	case "yml", "yaml":
-		err = yaml.Unmarshal(bs, &config)
-		return config, err
+		err = yaml.Unmarshal(bs, &c)
+		return c, err
 	case "toml":
-		_, err = toml.Decode(string(bs), &config)
-		return config, err
+		_, err = toml.Decode(string(bs), &c)
+		return c, err
 	case "json":
-		err = json.Unmarshal(bs, &config)
-		return config, err
+		err = json.Unmarshal(bs, &c)
+		return c, err
 	}
 	return nil, fmt.Errorf("not found")
 }

@@ -11,12 +11,10 @@ import (
 )
 
 type File struct {
-	Path     string
-	Buffer   *bytes.Buffer
-	Info     FileInfo
-	realpath string
-	status   int
-	Metadata *Metadata
+	Buffer *bytes.Buffer
+	Info   FileInfo
+	Page   *Page
+	status int
 }
 
 func (f *File) Status(i int) {
@@ -28,7 +26,8 @@ func (f *File) Written() bool {
 }
 
 func (f *File) Write() (err error) {
-	path, _ := filepath.Split(f.Path)
+	abs := f.Page.Target.Abs
+	path, _ := filepath.Split(abs)
 	ospath := filepath.FromSlash(path)
 
 	if ospath != "" {
@@ -38,9 +37,9 @@ func (f *File) Write() (err error) {
 		}
 	}
 
-	file, err := os.Create(f.Path)
+	file, err := os.Create(abs)
 	if err != nil {
-		return
+		return err
 	}
 	defer file.Close()
 
@@ -52,7 +51,7 @@ func (f *File) Write() (err error) {
 }
 
 func (f *File) Read() (err error) {
-	fh, err := os.Open(f.realpath)
+	fh, err := os.Open(f.Page.Source.Abs)
 	if err != nil {
 		return err
 	}
@@ -66,10 +65,9 @@ func (f *File) Read() (err error) {
 		return err
 	}
 
-	f.Metadata = &Metadata{}
 	if metadata != nil {
 		// parse yaml
-		err = yaml.Unmarshal(metadata.Bytes(), f.Metadata)
+		err = yaml.Unmarshal(metadata.Bytes(), f.Page)
 		if err != nil {
 			return err
 		}

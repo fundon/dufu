@@ -32,6 +32,8 @@ var PATTERN_REGEXP = regexp.MustCompile(`:(\w+)`)
 
 var SLUG_REGEXP = regexp.MustCompile(`-{2,}`)
 
+var INDEX_REGEXP = regexp.MustCompile(`index\.\w+$`)
+
 func Handle(ags ...string) interface{} {
 	var (
 		pattern, key string
@@ -55,8 +57,8 @@ func Handle(ags ...string) interface{} {
 	return func(f *space.File) {
 
 		var (
-			permalink          = f.Metadata.Permalink
-			dateStr            = f.Metadata.Date
+			permalink          = f.Page.Permalink
+			dateStr            = f.Page.Date
 			title              = strings.ToLower(f.Info.Name())
 			ishtml             = isHTML(path.Ext(title))
 			matchs, categories []string
@@ -85,20 +87,25 @@ func Handle(ags ...string) interface{} {
 		}
 
 		if permalink == "" {
-			permalink = pattern
-			matchs = patternMatchs
+			var relpath = f.Page.Source.Rel
+			if isIndex(relpath) {
+				permalink = relpath
+			} else {
+				permalink = pattern
+				matchs = patternMatchs
+			}
 		} else {
 			matchs = PATTERN_REGEXP.FindAllString(permalink, -1)
 		}
 
 		if len(matchs) > 0 {
-			if f.Metadata.Title == "" {
+			if f.Page.Title == "" {
 				title = basename(title)
 			} else {
-				title = strings.ToLower(slugify(f.Metadata.Title))
+				title = strings.ToLower(slugify(f.Page.Title))
 			}
-			if len(f.Metadata.Categories) > 0 {
-				categories = f.Metadata.Categories
+			if len(f.Page.Categories) > 0 {
+				categories = f.Page.Categories
 			}
 
 			placeholders := urlPlaceholders(date, title, categories)
@@ -116,7 +123,7 @@ func Handle(ags ...string) interface{} {
 			}
 		}
 
-		f.Path = filepath.Clean(permalink)
+		f.Page.Permalink = filepath.Clean("/" + permalink)
 	}
 }
 
@@ -155,6 +162,10 @@ func basename(p string) string {
 
 func isHTML(p string) bool {
 	return p == ".html"
+}
+
+func isIndex(p string) bool {
+	return INDEX_REGEXP.MatchString(p)
 }
 
 func createDate(str string, now time.Time) time.Time {

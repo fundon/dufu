@@ -7,37 +7,45 @@ import (
 	"path/filepath"
 )
 
+type Files map[string]*File
 type FileInfo os.FileInfo
 type FileInfos map[string]FileInfo
 
 type Filesystem interface {
-	Add(string, FileInfo, string)
+	Add(FileInfo, string, string)
 	Walk(string) FileInfos
-	Files() []*File
+	Files() Files
 }
 
 type filesystem struct {
-	files []*File
+	files map[string]*File
 }
 
 func NewFilesystem() Filesystem {
-	return &filesystem{}
+	return &filesystem{make(Files, 0)}
 }
 
-func (fs *filesystem) Files() []*File {
+func (fs *filesystem) Files() Files {
 	return fs.files
 }
 
-func (fs *filesystem) Add(realpath string, fi FileInfo, basepath string) {
+func (fs *filesystem) Add(fi FileInfo, realpath, basepath string) {
 	// relative path
 	path, _ := filepath.Rel(basepath, realpath)
 
-	fs.files = append(fs.files, &File{
-		Path:     path,
-		Buffer:   &bytes.Buffer{},
-		Info:     fi,
-		realpath: realpath,
-	})
+	fs.files[path] = &File{
+		//fs.files = append(fs.files, &File{
+		Page: &Page{
+			Target: Path{},
+			Source: Path{
+				Rel: path,
+				Abs: realpath,
+			},
+		},
+		Buffer: &bytes.Buffer{},
+		Info:   fi,
+		//})
+	}
 }
 
 func (fs *filesystem) Walk(path string) (a FileInfos) {

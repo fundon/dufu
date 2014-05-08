@@ -12,7 +12,7 @@ type Processor struct {
 }
 
 func (p *Processor) Handle(fs Filesystem) {
-	for i, file := range fs.Files() {
+	for _, file := range fs.Files() {
 		// Override ware.Run() method
 		file.Read()
 		c := p.CreateContext()
@@ -20,7 +20,7 @@ func (p *Processor) Handle(fs Filesystem) {
 		c.Map(file)
 		c.MapTo(fs, (*Filesystem)(nil))
 		c.Run()
-		p.index = i
+		p.index += 1
 	}
 }
 
