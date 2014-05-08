@@ -77,7 +77,10 @@ func runSpace(c *cli.Context) {
 		if layout == "" {
 			layout = "default"
 		}
-		r.HTML(0, layout, f.Page)
+		locals := make(space.Locals)
+		locals["Site"] = s.Site
+		locals["Page"] = f.Page
+		r.HTML(0, layout, locals)
 	})
 	s.Run()
 }

@@ -1,6 +1,7 @@
 package space
 
 type Site struct {
+	Title       string
 	Url         string
 	Source      string
 	Destination string
