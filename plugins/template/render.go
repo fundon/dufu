@@ -167,7 +167,17 @@ func (r *renderer) addYield(name string, binding interface{}) {
 		"content": func() (template.HTML, error) {
 			tmpl := r.t.New("content")
 			template.Must(tmpl.Funcs(helperFuncs).Parse(r.f.Buffer.String()))
-			buf, err := r.execute("content", binding)
+			var (
+				data = binding.(space.Locals)
+				page = data["Page"]
+				buf  = new(bytes.Buffer)
+				err  error
+			)
+			if page != nil {
+				buf, err = r.execute("content", page)
+			} else {
+				buf, err = r.execute("content", data)
+			}
 			return template.HTML(buf.String()), err
 		},
 	}
