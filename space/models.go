@@ -17,6 +17,7 @@ type Site struct {
 type Page struct {
 	Title      string   `yaml:"title"`
 	Date       string   `yaml:"date"`
+	Type       string   `yaml:"type"`
 	Layout     string   `yaml:"layout"`
 	Permalink  string   `yaml:"permalink"`
 	Draft      bool     `yaml:"draft"`

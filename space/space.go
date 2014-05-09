@@ -119,7 +119,7 @@ func build(s *Space) mw.Handler {
 			page.Id = filepath.FromSlash(reHtml.ReplaceAllString(page.Permalink, ""))
 			page.Target.Rel = page.Permalink
 			page.Target.Abs = filepath.Join(s.Destination(), page.Target.Rel)
-			if page.Layout == "page" {
+			if page.Type == "page" {
 				pages[page.Id] = page
 			} else {
 				posts[page.Id] = page
