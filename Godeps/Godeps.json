@@ -1,0 +1,38 @@
+{
+	"ImportPath": "github.com/futurespace/dufu",
+	"GoVersion": "go1.3beta2",
+	"Deps": [
+		{
+			"ImportPath": "code.google.com/p/go.net/html",
+			"Comment": "null-134",
+			"Rev": "9c0f9daaa74be0f25ccc12718bcb6b5d17802654"
+		},
+		{
+			"ImportPath": "github.com/BurntSushi/toml",
+			"Rev": "494b3ad22acb3467978419879b4ed227924df9cb"
+		},
+		{
+			"ImportPath": "github.com/codegangsta/cli",
+			"Comment": "1.0.0-72-gbb91895",
+			"Rev": "bb9189510af1f49580c073c9e59e8bf288f0df27"
+		},
+		{
+			"ImportPath": "github.com/codegangsta/inject",
+			"Comment": "v1.0-rc1",
+			"Rev": "37d7f8432a3e684eef9b2edece76bdfa6ac85b39"
+		},
+		{
+			"ImportPath": "github.com/futurespace/ware",
+			"Rev": "65b3d4b2ec28dab666251ad9e0c5ab4567a273d9"
+		},
+		{
+			"ImportPath": "github.com/russross/blackfriday",
+			"Comment": "v1.1-130-g7680f7f",
+			"Rev": "7680f7fdeb0d57222f62d02802af5e3585722384"
+		},
+		{
+			"ImportPath": "gopkg.in/yaml.v1",
+			"Rev": "b0c168ac0cf9493da1f9bb76c34b26ffef940b4a"
+		}
+	]
+}
