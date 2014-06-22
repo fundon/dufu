@@ -1,4 +1,4 @@
-package main
+package space
 
 import (
 	"encoding/json"
@@ -22,19 +22,7 @@ import (
 	mw "github.com/futurespace/ware"
 )
 
-var CmdBuild = cli.Command{
-	Name:        "build",
-	Usage:       "Build your site",
-	Description: ``,
-	Action:      runSpace,
-	Flags: []cli.Flag{
-		cli.StringFlag{"source, s", "src", "Source directory (defaults to ./src)"},
-		cli.StringFlag{"destination, d", "build", "Destination directory (defaults to ./build)"},
-		cli.StringFlag{"config, c", "", "Custom configuration file (defaults to config.yml|toml|json)"},
-	},
-}
-
-func runSpace(c *cli.Context) {
+func Action(c *cli.Context) {
 	s := space.Classic()
 
 	config, err := checkConfigFile(c.String("config"))
@@ -102,7 +90,7 @@ func checkConfigFile(fpath string) (c *space.Site, err error) {
 	}
 
 	var (
-		exts = []string{"yml", "yaml", "toml", "json"}
+		exts = []string{"yaml", "yml", "toml", "json"}
 		arr  map[string]string
 	)
 	arr = make(map[string]string, 0)
@@ -124,7 +112,7 @@ func checkConfigFile(fpath string) (c *space.Site, err error) {
 	}
 
 	switch ext {
-	case "yml", "yaml":
+	case "yaml", "yml":
 		err = yaml.Unmarshal(bs, &c)
 		return c, err
 	case "toml":
