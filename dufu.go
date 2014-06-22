@@ -5,7 +5,7 @@ import (
 	"runtime"
 
 	"github.com/codegangsta/cli"
-	"github.com/futurespace/dufu/cmd/space"
+	"github.com/futurespace/dufu/cmd/build"
 )
 
 const APP_VER = "0.0.0"
@@ -23,7 +23,7 @@ func init() {
 			Name:      "build",
 			ShortName: "b",
 			Usage:     "Build your site",
-			Action:    space.Action,
+			Action:    build.Action,
 			Flags: []cli.Flag{
 				cli.StringFlag{"source, s", "src", "Source directory (defaults to ./src)"},
 				cli.StringFlag{"destination, d", "build", "Destination directory (defaults to ./build)"},
