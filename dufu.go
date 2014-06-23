@@ -6,6 +6,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/futurespace/dufu/cmd/build"
+	"github.com/futurespace/dufu/cmd/serve"
 )
 
 const APP_VER = "0.0.0"
@@ -20,16 +21,24 @@ func init() {
 	app.Version = APP_VER
 	app.Commands = []cli.Command{
 		cli.Command{
-			Name:      "build",
-			ShortName: "b",
-			Usage:     "Build your site",
-			Action:    build.Action,
+			Name: "build",
+			//ShortName: "b",
+			Usage:  "Build your site",
+			Action: build.Action,
+		},
+		cli.Command{
+			Name:   "serve",
+			Usage:  "Start a serve",
+			Action: serve.Action,
 			Flags: []cli.Flag{
-				cli.StringFlag{"source, s", "src", "Source directory (defaults to ./src)"},
-				cli.StringFlag{"destination, d", "build", "Destination directory (defaults to ./build)"},
-				cli.StringFlag{"config, c", "", "Custom configuration file (defaults to config.yml|toml|json)"},
+				cli.StringFlag{"port, p", "8080", "Server's port (defaults to 8080)"},
 			},
 		},
+	}
+	app.Flags = []cli.Flag{
+		cli.StringFlag{"source, s", "src", "Source directory (defaults to ./src)"},
+		cli.StringFlag{"destination, d", "build", "Destination directory (defaults to ./build)"},
+		cli.StringFlag{"config, c", "", "Custom configuration file (defaults to config.yml|toml|json)"},
 	}
 }
 
