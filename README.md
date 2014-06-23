@@ -1,4 +1,4 @@
-# Dufu (WIP)
+# Dufu (WIP) [![Gobuild Download](http://beta.gobuild.io/badge/github.com/futurespace/dufu/download.png)](http://beta.gobuild.io/github.com/futurespace/dufu)
 
 A fast, pluggable static site generator using [ware][] in Golang.
 
