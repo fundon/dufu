@@ -19,6 +19,8 @@ func init() {
 	app.Name = "Dufu"
 	app.Usage = "A fast, pluggable static site generator"
 	app.Version = APP_VER
+	app.Author = "fundon"
+	app.Email = "cfddream@gmail.com"
 	app.Commands = []cli.Command{
 		cli.Command{
 			Name: "build",
